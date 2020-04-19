@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    // for (let i = 0; i < 128; i++) {
+    //     document.write(i + " <span style='background-color: lightgreen'>" + String.fromCharCode(i) + "</span><br>")
+    // }
+
+</script>
+<script>
+    let a = new Float32Array([0.1]);
+    
+    let intArr = new Uint8Array(a.buffer);
+    for (let i = 3; i >= 0; i--) {
+        s = intArr[i].toString(2);
+        while (s.length < 8) {
+            s = '0' + s;
+        }
+        console.log(s);
+        document.write(s);
+    }
+    
+    document.write('<br>');
+    document.write('00111101110011001100110011001101');
+</script>
+</html>
