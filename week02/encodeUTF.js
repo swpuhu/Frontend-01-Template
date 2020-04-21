@@ -62,18 +62,18 @@ function decodeUTF8 (code) {
 }
 
 let testString = `
-    阿里的方式起哦儿u啊的浪费哦额是有在在在你不在不不的不有在一有一你你的你这是一的打客服会儿压死一u企鹅温柔卡收到回复柯震东啊一曲i玩儿看见啊的恢复期诶肉 huiqe
-    fhkjashdufyewunasdhks ./.';',.=-~!@#$%^&*()_+{}}|{:"?><}
+    测试
 `
 let encodeArr = []
 for (let char of testString) {
     encodeArr.push(encodeUTF8(char));
 }
+console.log(encodeArr);
 
 let resString = '';
-// for (let code of encodeArr) {
-//     resString = resString + decodeUTF8(code);
-// }
+for (let code of encodeArr) {
+    resString = resString + decodeUTF8(code);
+}
 
 let ret = encodeUTF8('🏠');
 ret = decodeUTF8('0xf09f8fa0')
