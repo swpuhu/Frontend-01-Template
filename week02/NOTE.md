@@ -206,6 +206,8 @@ function decodeUTF8 (code) {
 
 ```
 
+## [测试链接](https://swpuhu.github.io/Frontend-01-Template/week02/utfTest.html)
+
 参考资料
 
 - [Unicode 和 UTF-8有什么区别](https://www.zhihu.com/question/23374078)
