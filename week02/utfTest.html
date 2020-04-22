@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="source">
+        <div>原始字符： </div>
+        <input id="source" type="text">
+    </div>
+    <div class="code">
+        <div>编码结果： </div>
+        <input type="text" id="code">
+    </div>
+</body>
+<script src="./encodeUTF.js"></script>
+<script>
+    let source = document.getElementById('source');
+    let code = document.getElementById('code');
+    source.onchange = function (e) {
+        let res = encodeUTF8(this.value[0]);
+        code.value = res;
+    }
+
+    code.onchange = function (e) {
+        let res = decodeUTF8(this.value);
+        source.value = res;
+    }
+    
+
+
+</script>
+</html>
