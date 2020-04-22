@@ -85,7 +85,7 @@ UnicodeEscapeSequence ::= u Hex4Digits |
                           => u[0-9a-fA-F]{4}
 HexEscapeSequence ::= x HexDigit HexDigit => x[0-9a-fA-F]{2}
 
-SingleEscapeCharacter ::= ['"bfnrtv]
+SingleEscapeCharacter ::= ['"\\bfnrtv]
 
 
 EscapeCharacter ::= SingleEscapeCharacter |
@@ -93,16 +93,22 @@ EscapeCharacter ::= SingleEscapeCharacter |
                     x |
                     u
                     => (['"bfnrtv]) | ([0-9]) | x | u
-                    => ['"bfnrtvxu0-9]
+                    => ['"\\bfnrtvxu0-9]
 
 
 SourceCharacter ::= any Unicode code point => /./
 
-LineTerminator ::= <LF> | <CR> | <LS> | <PS>
+LineTerminator ::= <LF> | <CR> | <LS> | <PS> => [\u000a\u000d\u2028\u2029]
+                   \u000a  \u000d  \u2028 \u2029
 
-NonEscapeCharacter ::= SourceCharacter but not one of EscapeCharacter or LineTerminator => [^'"bfnrtvxu0-9]|[\u000a\u000d\u2028\u2029]
+LineTerminatorSequence ::= <LF> | 前一个字符不为<LF>的 <CR> | <LS> | <PS> | <CR><LF>
+                        => [\u000a\u000d\u2028\u2029]
 
-CharacterEscapeSequence ::= SingleEscapeCharacter | NonEscapeCharacter =>  ['"bfnrtv] | [^'"bfnrtvxu0-9] | [\u000a\u000d\u2028\u2029]
+NonEscapeCharacter ::= SourceCharacter but not one of EscapeCharacter or LineTerminator 
+                    => [^'"bfnrtvxu0-9\u000a\u000d\u2028\u2029]
+
+CharacterEscapeSequence ::= SingleEscapeCharacter | NonEscapeCharacter 
+=>  ['"\\bfnrtv]|[^'"bfnrtvxu0-9\u000a\u000d\u2028\u2029]
 
 
 
@@ -110,10 +116,32 @@ EscapeSequence ::= CharacterEscapeSequence |
                     0 (注：0前面不能是DecimalDigit) |
                     HexEscapeSequence |
                     UnicodeEscapeSequence
-                    => ['"bfnrtv] | [^'"bfnrtvxu0-9] | [\u000a\u000d\u2028\u2029] | (?<=[^1-9])0 | 
+                    => ['"\\bfnrtv]|[^'"bfnrtvxu0-9\u000a\u000d\u2028\u2029] | x[0-9a-fA-F]{2} | u[0-9a-fA-F]{4}
 
+LineContinuation ::= \ LineTerminatorSequence => \[\u000a\u000d\u2028\u2029]
 
+SingleStringCharacter ::= SourceCharacter but not one of ' or LineTerminator |
+                            <LS> |
+                            <PS> |
+                            \ EscapeSequence |
+                            LineContinuation
+                            => /
+                            [^'\u000a\u000d\u2028\u2029]|
+                            \\(['"\\bfnrtv]|[^'"bfnrtvxu0-9\u000a\u000d\u2028\u2029]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})|
+                            \[\u000a\u000d\u2028\u2029]
+                            /
+                        => [^'\u000a\u000d\u2028\u2029]|\\(['"\\bfnrtv]|[^'"bfnrtvxu0-9\u000a\u000d\u2028\u2029]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})|\[\u000a\u000d\u2028\u2029]
 
+SingleStringCharacters ::= SingleStringCharacter SingleStringCharacters?
+                        =>  /'([^'\u000a\u000d\u2028\u2029]|\\(['"\\bfnrtv]|[^'"bfnrtvxu0-9\u000a\u000d\u2028\u2029]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})|\[\u000a\u000d\u2028\u2029])*'/
+DoubleStringCharacters ::= /"([^"\u000a\u000d\u2028\u2029]|\\(['"\\bfnrtv]|[^'"bfnrtvxu0-9\u000a\u000d\u2028\u2029]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})|\[\u000a\u000d\u2028\u2029])*"/
+```
+
+## 匹配字符串字面量的正则表达式为：
+```
+/'([^'\u000a\u000d\u2028\u2029]|\\(['"\\bfnrtv]|[^'"bfnrtvxu0-9\u000a\u000d\u2028\u2029]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})|\[\u000a\u000d\u2028\u2029])*'/
+
+/"([^"\u000a\u000d\u2028\u2029]|\\(['"\\bfnrtv]|[^'"bfnrtvxu0-9\u000a\u000d\u2028\u2029]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})|\[\u000a\u000d\u2028\u2029])*"/
 ```
 
 ## UTF-8编码：
