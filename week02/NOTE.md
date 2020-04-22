@@ -76,13 +76,44 @@ HexDigit ::= [0-9a-fA-F]
 同上， 推导过程如下：
 
 ```
-StringLiteral ::= " DoubleStringCharacters? " | ' SingleStringCharaters? '
+Hex4Digits ::= [0-9a-fA-F]{4}
 
-DoubleStringCharacters ::= DoubleStringCharacter DoubleStringCharacters?
+CodePoint ::=  数值不大于0x10FFFF的Hex4Digits
 
-SingleStringCharacters ::= SingleStringCharacter SingleStringCharacters?
+UnicodeEscapeSequence ::= u Hex4Digits |
+                          u{CodePoint} 
+                          => u[0-9a-fA-F]{4}
+HexEscapeSequence ::= x HexDigit HexDigit => x[0-9a-fA-F]{2}
 
-DoubleStringCharacter ::=
+SingleEscapeCharacter ::= ['"bfnrtv]
+
+
+EscapeCharacter ::= SingleEscapeCharacter |
+                    DecimalDigit |
+                    x |
+                    u
+                    => (['"bfnrtv]) | ([0-9]) | x | u
+                    => ['"bfnrtvxu0-9]
+
+
+SourceCharacter ::= any Unicode code point => /./
+
+LineTerminator ::= <LF> | <CR> | <LS> | <PS>
+
+NonEscapeCharacter ::= SourceCharacter but not one of EscapeCharacter or LineTerminator => [^'"bfnrtvxu0-9]|[\u000a\u000d\u2028\u2029]
+
+CharacterEscapeSequence ::= SingleEscapeCharacter | NonEscapeCharacter =>  ['"bfnrtv] | [^'"bfnrtvxu0-9] | [\u000a\u000d\u2028\u2029]
+
+
+
+EscapeSequence ::= CharacterEscapeSequence |
+                    0 (注：0前面不能是DecimalDigit) |
+                    HexEscapeSequence |
+                    UnicodeEscapeSequence
+                    => ['"bfnrtv] | [^'"bfnrtvxu0-9] | [\u000a\u000d\u2028\u2029] | (?<=[^1-9])0 | 
+
+
+
 ```
 
 ## UTF-8编码：
