@@ -9,6 +9,8 @@ function convertStringToNumber (string, x = 10) {
 
         } else if (/[A-F]/.test(chars[i])) {
             number += chars[i].codePointAt(0) - 'A'.codePointAt() + 10;
+        } else {
+            number += chars[i].codePointAt(0) - '0'.codePointAt();
         }
         i++;
     }
@@ -16,14 +18,23 @@ function convertStringToNumber (string, x = 10) {
         i++;
     }
     let fraction = 1;
-    while (i < chars.length) {
+    while (i < chars.length && chars[i] != 'e') {
         fraction /= x;
         number += (chars[i].codePointAt(0) - '0'.codePointAt()) * fraction;
-        
         i++;
     }
-    // fraction /= x;
-    return number;
+    
+    
+    if (chars[i] == 'e') {
+        i++;
+    }
+    let exp = 0;
+    while (i < chars.length) {
+        exp *= chars[i];
+        exp += (chars[i].codePointAt(0) - '0'.codePointAt());
+        i++;
+    }
+    return number * (10 ** exp);
 }
 
 
@@ -45,9 +56,9 @@ function convertNumberToString(number, x = 10) {
     return string;
 }
 
-let res = convertStringToNumber('ff', 16);
+let res = convertStringToNumber('2.13456e2', 10);
 console.log(res);
 
-res = convertNumberToString(3, 2);
+res = convertNumberToString(0.1, 2);
 
 console.log(res);

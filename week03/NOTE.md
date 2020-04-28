@@ -1,4 +1,35 @@
-# Atom
+# 总结
+
+## JavaScript 标准中，我们无法实现的对象
+
+### Reference Type
+
+> Reference 类型被用于解释 `delete`, `typeof`， 赋值运算符，`super` 关键字等运算符的行为。例如：赋值符号的左值就应该产生一个reference。
+
+一个Reference是一个已解析的名称或者属性绑定。一个Reference由三部分组成： 
+- base value component
+- referenced name component
+- Boolean-valued strict reference flag
+
+其中，base value component是下列类型中的其中一种：
+- undefined
+- Object
+- Boolean
+- String
+- Symbol
+- Number
+- Environment Record
+
+一个为undefined的base value表示该引用不能作为一个绑定被解析。
+referenced name component 是一个字符串或者Symbol值
+
+
+
+
+
+
+
+# 课堂笔记
 
 ## Grammer
 - 简单语句:
