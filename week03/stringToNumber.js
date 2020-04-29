@@ -56,7 +56,7 @@ function convertNumberToString(number, x = 10) {
     return string;
 }
 
-let res = convertStringToNumber('2.13456e2', 10);
+let res = convertStringToNumber('0.3', 10);
 console.log(res);
 
 res = convertNumberToString(0.1, 2);
