@@ -84,7 +84,7 @@ while (queue.length) {
         });
         if (current.parent) {
             edges.push({
-                label: `e${current.parent.id}-${current.id}`,
+                // label: `e${current.parent.id}-${current.id}`,
                 source: current.parent.id.toString(),
                 target: current.id.toString(),
                 weight: 1

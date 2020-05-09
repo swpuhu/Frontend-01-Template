@@ -15,23 +15,31 @@
             container: 'mountNode',
             width: window.innerWidth,
             height: window.innerHeight,
+            modes: {
+                default: ['drag-canvas']
+            },
             defaultNode: {
                 size: 30,
+                type: 'rect',
                 labelCfg: {
+                    autoRotate: true,
                     style: {
-                        fill: '#fff',
-                    },
+                        fill: '#000'
+                    }
                 },
             },
             defaultEdge: {
                 labelCfg: {
                     autoRotate: true,
+                    style: {
+                        fill: '#000'
+                    }
                 },
             },
             layout: {
-                type: 'dagre', // 设置布局算法为 force
-                linkDistance: 100, // 设置边长为 100
-                preventOverlap: true, // 设置防止重叠
+                type: 'dagre',
+                rankdir: 'TB',
+                nodesep: 20,
             },
         });
         const main = async () => {
@@ -49,22 +57,7 @@
                 node.style.lineWidth = 1;
                 node.style.stroke = '#666';
                 node.style.fill = 'steelblue';
-                switch (node.class) {
-                    case 'c0': {
-                        node.type = 'circle';
-                        break;
-                    }
-                    case 'c1': {
-                        node.type = 'rect';
-                        node.size = [35, 20];
-                        break;
-                    }
-                    case 'c2': {
-                        node.type = 'ellipse';
-                        node.size = [35, 20];
-                        break;
-                    }
-                }
+                node.type = 'rect';
             });
             edges.forEach(edge => {
                 if (!edge.style) {
