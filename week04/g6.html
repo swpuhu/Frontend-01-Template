@@ -16,7 +16,7 @@
             width: window.innerWidth,
             height: window.innerHeight,
             modes: {
-                default: ['drag-canvas']
+                default: ['drag-canvas', 'zoom-canvas']
             },
             defaultNode: {
                 size: 30,
@@ -25,7 +25,8 @@
                     autoRotate: true,
                     style: {
                         fill: '#000'
-                    }
+                    },
+                    
                 },
             },
             defaultEdge: {
@@ -43,11 +44,7 @@
             },
         });
         const main = async () => {
-            const response = await fetch(
-                'https://gw.alipayobjects.com/os/basement_prod/6cae02ab-4c29-44b2-b1fd-4005688febcb.json',
-            );
-            let remoteData = await response.json();
-            remoteData = data;
+            let remoteData = data;
             const nodes = remoteData.nodes;
             const edges = remoteData.edges;
             nodes.forEach(node => {
@@ -57,7 +54,6 @@
                 node.style.lineWidth = 1;
                 node.style.stroke = '#666';
                 node.style.fill = 'steelblue';
-                node.type = 'rect';
             });
             edges.forEach(edge => {
                 if (!edge.style) {
