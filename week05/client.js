@@ -52,7 +52,10 @@ ${this.bodyText}`
 
                 connection.on('data', (data) => {
                     response.parser.receive(data.toString());
-                    resolve(data.toString());
+                    if (response.parser.bodyParser && response.parser.bodyParser.isFinished) {
+                        resolve(response.parser.response);
+                    }
+                    // console.log(response.parser.headers);
                     connection.end();
                 });
                 connection.on('end', () => {
@@ -104,6 +107,21 @@ class ResponseParser {
         console.log(this.statusLine);
     }
 
+    get isFinished () {
+        this.bodyParser && this.bodyParser.isFinished;
+    }
+
+    get response () {
+        this.statusLine.match(/HTTP\/1.1 ([0-9]+) ([\s\S]+)/);
+
+        return {
+            statusCode: RegExp.$1,
+            statusText: RegExp.$2,
+            headers: this.headers,
+            body: this.bodyParser.content.join('')
+        }
+    }
+
     receiveChar (char) {
         if (this.current === this.WAITING_STATUS_LINE) {
             if (char === '\r') {
@@ -113,11 +131,18 @@ class ResponseParser {
             } else {
                 this.statusLine += char;
             }
+        } else if (this.current === this.WAITING_STATUS_LINE_END) {
+            if (char === '\n') {
+                this.current = this.WAITING_HEADER_NAME;
+            }
         } else if (this.current === this.WAITING_HEADER_NAME) {
-            if (char === '\r') {
-                this.current = this.WAITING_BODY;
-            } else if (char === ':') {
+            if (char === ':') {
                 this.current = this.WAITING_HEADER_SPACE;
+            } else if (char === '\r') {
+                this.current = this.WAITING_HEADER_BLOCK_END;
+                if (this.headers['Transfer-Encoding'] === 'chunked') {
+                    this.bodyParser = new TrunkedBodyParser();
+                }
             } else {
                 this.headerName += char;
             }
@@ -138,15 +163,81 @@ class ResponseParser {
             if (char === '\n') {
                 this.current = this.WAITING_HEADER_NAME;
             }
+        } else if (this.current === this.WAITING_HEADER_BLOCK_END) {
+            if (char === '\n') {
+                this.current = this.WAITING_BODY;
+            }
+        } else if (this.current === this.WAITING_BODY) {
+            if (this.bodyParser) {
+                this.bodyParser.receiveChar(char);
+            }
+            
+        }
+    }
+}
+
+class TrunkedBodyParser {
+    constructor () {
+        this.WAITING_LENGTH = 1;
+        this.WAITING_LENGTH_LINE_END = 2;
+        this.READING_TRUNK = 3;
+        this.WAITING_NEW_LINE = 4;
+        this.WAITING_NEW_LINE_END = 5;
+        this.READING_TRUNK_END = 6;
+        this.READING_TRUNK_LINE_END = 7;
+        this.isFinished = false;
+        this.length = 0;
+        this.content = [];
+        this.current = this.WAITING_LENGTH;
+    }
+
+    receiveChar(char) {
+        // console.log(char);
+        if (this.current === this.WAITING_LENGTH) {
+            if (char === '\r') {
+                this.current = this.WAITING_LENGTH_LINE_END;
+            } else {
+                let length = char.charCodeAt(0) - '0'.charCodeAt(0);
+                if (length === 0) {
+                    this.isFinished = true;
+                    console.log(this.content.join(''));
+                }
+            }
+        } else if (this.current === this.WAITING_LENGTH_LINE_END) {
+            // console.log('//////');
+            
+            if (char === '\n') {
+                this.current = this.READING_TRUNK;
+            }
+        } else if (this.current === this.WAITING_NEW_LINE) {
+            if (char === '\r') {
+                this.current = this.WAITING_NEW_LINE_END;
+            }
+        } else if (this.current === this.WAITING_NEW_LINE_END) {
+            if (char === '\n') {
+                this.current = this.READING_TRUNK;
+            }
+            
+        } else if (this.current === this.READING_TRUNK) {
+            if (char === '\r') {
+                this.current = this.READING_TRUNK_END;
+            } else {
+                this.content.push(char);
+            }
+            
+        } else if (this.current === this.READING_TRUNK_END) {
+            if (char === '\n') {
+                this.current = this.WAITING_LENGTH;
+            }
         }
     }
 }
 
 let request = new Request({
-    method: 'GET',
+    method: 'POST',
     host: '127.0.0.1',
     port: 9000,
-    path: '/test2',
+    path: '/',
     "Content-Type": 'application/x-www-form-urlencoded',
     headers: {
         "X-Foo-Client": 'huhu'
