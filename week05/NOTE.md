@@ -1,6 +1,10 @@
 # 每周总结可以写在这里
 
+## Toy-Browser
+[点击查看代码](https://github.com/swpuhu/Frontend-01-Template/blob/master/week05/client.js)
 
+## 可视化JS所有对象的作业
+[点击查看效果](https://swpuhu.github.io/Frontend-01-Template/week04/g6.html)
 
 ## [点击查看HTTP 标准](https://tools.ietf.org/html/rfc2616)
 HTTP请求
