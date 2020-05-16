@@ -1,5 +1,5 @@
 const net = require('net');
-
+const parser = require('./parser');
 class Request {
     // method, url = host + port + path
     // body: key: value
@@ -52,9 +52,7 @@ ${this.bodyText}`
 
                 connection.on('data', (data) => {
                     response.parser.receive(data.toString());
-                    if (response.parser.bodyParser && response.parser.bodyParser.isFinished) {
-                        resolve(response.parser.response);
-                    }
+                    resolve(response.parser.response);
                     // console.log(response.parser.headers);
                     connection.end();
                 });
@@ -94,6 +92,7 @@ class ResponseParser {
         this.headers = {};
         this.headerName = '';
         this.headerValue = '';
+        this.body = [];
     }
 
     /**
@@ -118,7 +117,7 @@ class ResponseParser {
             statusCode: RegExp.$1,
             statusText: RegExp.$2,
             headers: this.headers,
-            body: this.bodyParser.content.join('')
+            body: this.bodyParser ? this.bodyParser.content.join('') : this.body.join('')
         }
     }
 
@@ -170,8 +169,9 @@ class ResponseParser {
         } else if (this.current === this.WAITING_BODY) {
             if (this.bodyParser) {
                 this.bodyParser.receiveChar(char);
+            } else {
+                this.body.push(char);
             }
-            
         }
     }
 }
@@ -234,10 +234,10 @@ class TrunkedBodyParser {
 }
 
 let request = new Request({
-    method: 'POST',
+    method: 'GET',
     host: '127.0.0.1',
     port: 9000,
-    path: '/',
+    path: '/app.js',
     "Content-Type": 'application/x-www-form-urlencoded',
     headers: {
         "X-Foo-Client": 'huhu'
@@ -247,11 +247,5 @@ let request = new Request({
     }
 });
 request.send().then(response => {
-    console.log(response.body);
-    
-
-})
-
-
-
-
+    parser(response.body);
+});
