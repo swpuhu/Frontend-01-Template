@@ -466,7 +466,7 @@ let html3 = `<style>
 </div>`
 let res = parseHTML(html3);
 // console.log(JSON.stringify(res, " ", 4));
-render([500, 200], res.children[2]);
+render([500, 100], res.children[2]);
 
 
 module.exports = parseHTML;
