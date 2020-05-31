@@ -1,0 +1,24 @@
+{
+  "name": "Frontend-01-Template",
+  "version": "1.0.0",
+  "description": "## 讲师课件下载地址",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swpuhu/Frontend-01-Template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swpuhu/Frontend-01-Template/issues"
+  },
+  "homepage": "https://github.com/swpuhu/Frontend-01-Template#readme",
+  "dependencies": {
+    "canvas": "^2.6.1",
+    "images": "^3.0.2"
+  }
+}

@@ -106,8 +106,9 @@ function computeCSS (element) {
 
 function emit(token) {
     let top = stack[stack.length - 1];
+    // console.log(token);
     if (token.type === 'startTag') {
-        console.log(token);
+        // console.log(token);
         
         let element = {
             type: 'element',
@@ -138,7 +139,7 @@ function emit(token) {
             stack.pop();
         }
         currentTextNode = null;
-    } else if (token.type ===' text') {
+    } else if (token.type ==='text') {
         if (currentTextNode == null) {
             currentTextNode = {
                 type: 'text',
@@ -1039,7 +1040,7 @@ function attributeValueDoubleQuoted (c) {
             type: 'EOF',
         });
     } else {
-        token.attributeValue = c;
+        token.attributeValue += c;
     }
     return attributeValueDoubleQuoted;
 }
@@ -1151,6 +1152,8 @@ function parse (string) {
             state = nextState;
         }
     }
+    state = state(EOF);
+    return stack[0];
 }
 
 
@@ -1175,8 +1178,8 @@ body div img{
 </body>
 </html>
 `
+let testHtml2 = `<div id="hello" style="border-radius:150px;width:400px;height:400px;border:5px green;border-style:dashed">
+</div>`
 
-parse(testHtml);
-console.log(cssText);
-let ast = css.parse(cssText);
-console.log(JSON.stringify(ast, null, "    "));
+let res = parse(testHtml2);
+console.log(JSON.stringify(res));

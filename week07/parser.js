@@ -1,11 +1,12 @@
 const css = require('css');
 
 const EOF = Symbol('EOF');
-
+const layout = require('./layout');
 let currentToken = null;
 let currentAttribute = null;
 let stack = [{ type: 'document', children: [] }];
 let currentTextNode = null;
+const render = require('./render');
 
 let rules = [];
 
@@ -81,6 +82,18 @@ function computeCSS(element) {
     if (!element.computedStyle) {
         element.computedStyle = {};
     }
+    let style = element.attributes.find(item => item.name === 'style');
+    if (style) {
+        let stylesArray = style.value.split(';');
+        for (let entry of stylesArray) {
+            if (!entry) continue;
+            let [key, value] = entry.split(':');
+            element.computedStyle[key.trim()] = {
+                specificity: [0, 0, 0, 0],
+                value: value.trim()
+            }
+        }
+    }
 
     for (let rule of rules) {
         let selectorParts = rule.selectors[0].split(' ').reverse();
@@ -123,7 +136,7 @@ function computeCSS(element) {
 
 
 function emit(token) {
-
+    // console.log(token);
     let top = stack[stack.length - 1];
     if (token.type === 'startTag') {
         let element = {
@@ -136,7 +149,7 @@ function emit(token) {
         element.tagName = token.tagName;
 
         for (let p in token) {
-            if (p !== 'type' || p !== 'tagName') {
+            if (p !== 'type' && p !== 'tagName') {
                 element.attributes.push({
                     name: p,
                     value: token[p]
@@ -162,7 +175,7 @@ function emit(token) {
             }
             stack.pop();
         }
-
+        layout(top);
         currentTextNode = null;
     } else if (token.type === 'text') {
         if (currentTextNode === null) {
@@ -441,10 +454,19 @@ body div img{
 </html>
 `
 
-let html2 = `<div style="border-radius:150px;width:400px;height:400px;border:5px green;border-style:dashed"></div>`;
-let res = parseHTML(html2);
-console.log(JSON.stringify(res, " ", 4));
-
+let html2 = `<div style="display: flex"><div></div><div></div></div>`;
+let html3 = `<style>
+    div {
+        border: 1px solid black;
+    }
+</style>
+<div style="display: flex;background-color:rgb(255, 128, 0); width: 500px;height:100px;">
+    <div style="flex: 1;width:200px;height: 70px; background-color: rgb(255, 255, 0)"></div>
+    <div style="width: 200px;height:50px; background-color: rgb(0, 255, 255)"></div>
+</div>`
+let res = parseHTML(html3);
+// console.log(JSON.stringify(res, " ", 4));
+render([500, 200], res.children[2]);
 
 
 module.exports = parseHTML;
