@@ -19,6 +19,12 @@
   "homepage": "https://github.com/swpuhu/Frontend-01-Template#readme",
   "dependencies": {
     "canvas": "^2.6.1",
-    "images": "^3.0.2"
+    "css-select": "^2.1.0",
+    "domhandler": "^3.0.0",
+    "html-select": "^2.3.24",
+    "html-tokenize": "^2.0.1",
+    "htmlparser2": "^4.1.0",
+    "images": "^3.0.2",
+    "nwmatcher": "^1.4.4"
   }
 }
