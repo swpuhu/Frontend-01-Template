@@ -2,7 +2,7 @@
 
 脑图
 
-
+![](https://s1.ax1x.com/2020/06/09/tI3nX9.png)
 # CSS Property
 
 ## Layout
