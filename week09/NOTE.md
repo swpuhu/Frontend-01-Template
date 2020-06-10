@@ -1,7 +1,7 @@
 # 每周总结可以写在这里
 
 脑图
-
+如无法显示图片，[点此链接查看脑图](https://s1.ax1x.com/2020/06/10/t7V2yq.md.png)
 ![](https://s1.ax1x.com/2020/06/10/t7V2yq.md.png)
 # CSS Property
 
