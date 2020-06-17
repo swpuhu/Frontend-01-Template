@@ -1,6 +1,6 @@
 let pattern = [
-    [2, 0, 0],
-    [0, 1, 0],
+    [0, 0, 0],
+    [0, 0, 0],
     [0, 0, 0]
 ];
 
@@ -24,6 +24,9 @@ function show (array) {
             }
             item.addEventListener('click', () => {
                 move(col, row);
+                let best = bestChoise(pattern, color);
+                console.log(best);
+                move(best.point[0], best.point[1]);
             })
             doc.appendChild(item);
         }
@@ -31,9 +34,8 @@ function show (array) {
 }
 
 function move(x, y) {
+    if (pattern[y][x] !== 0) return;
     pattern[y][x] = color;
-    let best = bestChoise(pattern, color);
-    console.log(best);
     show(pattern);
     let isWillWin = willWin(pattern, 3 - color);
     if (isWillWin) {
@@ -43,7 +45,7 @@ function move(x, y) {
     if (isWin) {
         alert(`${color === 1 ? '⭕️' : '❌'} is win`);
     }
-    color = 3 - color
+    color = 3 - color;
 }
 
 function check(pattern, color, x, y) {
@@ -124,7 +126,9 @@ function willWin (pattern, color) {
 
 function bestChoise (pattern, color) {
     let point = null;
-    if (point = willWin(pattern, color)) {
+    let win = willWin(pattern, color);
+    if (win) {
+        point = win;
         return {
             point: point,
             result: 1
@@ -139,7 +143,7 @@ function bestChoise (pattern, color) {
             }
             let tmp = clone(pattern);
             tmp[i][j] = color;
-            let opposite = bestChoise(pattern, 3 - color);
+            let opposite = bestChoise(tmp, 3 - color);
             if (-opposite.result > result) {
                 point = [j, i];
                 result = -opposite.result;
