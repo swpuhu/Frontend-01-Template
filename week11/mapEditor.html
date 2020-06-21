@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .cell {
+            display: inline-block;
+            vertical-align: middle;
+            border-bottom: 1px solid white;
+            border-right:  1px solid white;
+            background-color: gray;
+            width: 6px;
+            height: 6px;
+        }
+
+        #container {
+            line-height: 0px;
+            width: 701px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+
+    </div>
+
+    <div>
+        <label for="mode">绘制模式</label>
+        <input type="radio" name="mode" id="draw" checked>
+        <label for="mode">橡皮模式</label>
+        <input type="radio" name="mode" id="erase">
+    </div>
+    <div>
+        <button id="clearAll">清除所有</button>
+        <button id="start">指定起点</button>
+        <button id="end">指定终点</button>
+        <button id="path">开始寻路</button>
+    </div>
+</body>
+<script src="./mapEditor.js"></script>
+</html>
