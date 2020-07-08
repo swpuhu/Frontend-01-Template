@@ -1,4 +1,8 @@
-# 每周总结可以写在这里
+## 作业链接
+
+[Proxy](https://github.com/swpuhu/Frontend-01-Template/blob/master/week13/proxy.html)
+
+[Range](https://github.com/swpuhu/Frontend-01-Template/blob/master/week13/dragable.html)
 
 ## 组件化基础
 
