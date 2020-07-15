@@ -6,9 +6,6 @@ class Wrapper {
         this.children = [];
         this.root = document.createElement(type);
     }
-    set class (v) { // property
-        console.log("Parent:: class", v);
-    }
 
     setAttribute (name, value) { //attribute
         this.root.setAttribute(name, value);
@@ -58,6 +55,7 @@ class Div {
 }
 class Text {
     constructor (text) {
+        this.children = [];
         this.root = document.createTextNode(text);
     }
 
@@ -70,13 +68,48 @@ class Text {
 class Child {
 
 }
-let component = <Div id="a" class="b" style="width: 100px; height: 100px; background-color: #f60">
-    <Div/>
-    <Div/>
-    hello world
-    <Div/>
-</Div>
-console.log(component);
+
+class MyComponent {
+    constructor (config) {
+        this.children = [];
+    }
+
+    setAttribute (name, value) {
+        this.root.setAttribute(name, value);
+    }
+
+    appendChild (child) {
+        this.children.push(child);
+    }
+
+    render () {
+        return <article>
+            <header>I' m a header</header>
+            {this.slot}
+            <footer>I'm a footer</footer>
+        </article>
+    }
+
+    mountTo (parent) {
+        this.slot = <div></div>
+        for (let child of this.children) {
+            this.slot.appendChild(child);
+        }
+
+        this.render().mountTo(parent);
+    }
+}
+// let component = <Div id="a" class="b" style="width: 100px; height: 100px; background-color: #f60">
+//     <Div/>
+//     <Div/>
+//     hello world
+//     <Div/>
+// </Div>
+
+let component = <MyComponent>
+    <div>text text text</div>
+</MyComponent>
+
 component.mountTo(document.body);
 
 function create (Cls, attributes, ...children) {

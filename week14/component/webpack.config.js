@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-    entry: './main.js',
+    entry: './main2.jsx',
     mode: 'development',
     optimization: {
         minimize: false
@@ -10,16 +10,24 @@ module.exports = {
         contentBase: path.resolve(__dirname, 'dist/')
     },
     module: {
-        rules: [
-            {
-                test: /\.js$/,
+        rules: [{
+                test: /\.jsx?$/,
                 use: {
                     loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env'],
-                        plugins: [["@babel/plugin-transform-react-jsx", {pragma: 'create'}]]
+                        plugins: [
+                            ["@babel/plugin-transform-react-jsx", { pragma: 'createElement' }]
+                        ]
                     }
                 }
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
             }
         ]
     }
