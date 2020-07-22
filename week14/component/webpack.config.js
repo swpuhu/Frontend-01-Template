@@ -28,6 +28,14 @@ module.exports = {
                     'style-loader',
                     'css-loader'
                 ]
+            },
+            {
+                test: /\.view/,
+                use: [
+                    {
+                        loader: require.resolve('./myLoader.js')
+                    }
+                ]
             }
         ]
     }

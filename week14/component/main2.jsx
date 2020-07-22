@@ -1,6 +1,6 @@
 import { createElement } from './createElement';
 import './index.css';
-
+import './carousel.view';
 
 
 class Child {
