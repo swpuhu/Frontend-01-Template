@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    
+</body>
+<script src="./gesture.js"></script>
+<script>
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.addEventListener('touchmove', e => e.preventDefault(), {passive: false});
+
+    document.body.addEventListener('tap', () => {
+        console.log('tap event');
+    })
+</script>
+</html>

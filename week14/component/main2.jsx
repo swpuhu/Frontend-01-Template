@@ -1,8 +1,8 @@
 import { createElement } from './createElement';
 import './index.css';
 import './carousel.view';
-
-
+import {Timeline, Animation} from './animation/animation.js';
+import {cubicBezier, ease} from './animation/cubicBezier';
 class Child {
 
 }
@@ -38,28 +38,22 @@ class Carousel {
         </div>
 
         let position = 0;
+        let timeline = new Timeline;
         let nextPic = () => {
             let nextPosition = (position + 1) % this.data.length
             let current = children[position];
             let next = children[nextPosition];
 
-            current.style.transition = 'none';
-            next.style.transition = 'none';
-
-            current.style.transform = `translateX(${-100 * position}%)`;
-            next.style.transform = `translateX(${100 - 100 * nextPosition}%)`;
-
-            setTimeout(() => {
-                current.style.transition = '';
-                next.style.transition = '';
-
-                current.style.transform = `translateX(${-100 - 100 * position}%)`;
-                next.style.transform = `translateX(${-100 * nextPosition}%)`;
-                position = nextPosition;
-
-            }, 16);
+            let currentAnimation = new Animation(current.style, 'transform', (v) => `translateX(${v}%)`, -100 * position, -100 - 100 * position, 500, 0, ease);
+            let nextAnimation = new Animation(next.style, "transform", (v) => `translateX(${v}%)`, 100 - 100 * nextPosition, -100 * nextPosition, 500, 0, ease);
+            // current.style.transform = `translateX(${-100 * position}%)`;
+            // next.style.transform = `translateX(${100 - 100 * nextPosition}%)`;
+            timeline.add(currentAnimation);
+            timeline.add(nextAnimation);
+            position = nextPosition;
             setTimeout(nextPic, 3000);
         }
+        timeline.start();
 
         setTimeout(nextPic, 3000);
         root.addEventListener('mousedown', (e) => {
