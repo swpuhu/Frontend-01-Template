@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    
+    <div id="my" style="transform: translate(0px, 0px); width: 100px;height: 100px;background-color: lightblue;"></div>
 </body>
 <script src="./gesture.js"></script>
 <script>
@@ -21,8 +21,18 @@
     document.addEventListener('selectstart', e => e.preventDefault());
     document.addEventListener('touchmove', e => e.preventDefault(), {passive: false});
 
-    document.body.addEventListener('tap', () => {
-        console.log('tap event');
+    document.body.addEventListener('panstart', (e) => {
+        
+    })
+    let my = document.getElementById('my');
+    let x = 0, y = 0;
+    document.body.addEventListener('pan', e => {
+        my.style.transform = `translate(${x + e.clientX - e.startX}px, ${y + e.clientY - e.startY}px)`;
+    })
+    document.body.addEventListener('panend', e => {
+        x = x + e.clientX - e.startX;
+        y = y + e.clientY - e.startY;
+
     })
 </script>
 </html>
