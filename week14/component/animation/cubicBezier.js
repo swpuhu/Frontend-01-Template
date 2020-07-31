@@ -81,6 +81,6 @@ export function cubicBezier(p1x, p1y, p2x, p2y) {
     return solve;
 }
 
-export const ease = cubicBezier(0.25, 1, 0.25, 1);
+export const ease = cubicBezier(0.25, .1, 0.25, 1);
 
 export const linear = cubicBezier(0, 0, 1, 1);

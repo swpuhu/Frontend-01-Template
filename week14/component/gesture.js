@@ -1,4 +1,3 @@
-enableGesture(document.body);
 export function enableGesture(element) {
     const contexts = Object.create(null);
 

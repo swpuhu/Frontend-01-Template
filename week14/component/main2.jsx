@@ -43,7 +43,6 @@ class Carousel {
             let nextPosition = (position + 1) % this.data.length
             let current = children[position];
             let next = children[nextPosition];
-
             let currentAnimation = new Animation(current.style, 'transform', (v) => `translateX(${v}%)`, -100 * position, -100 - 100 * position, 500, 0, ease);
             let nextAnimation = new Animation(next.style, "transform", (v) => `translateX(${v}%)`, 100 - 100 * nextPosition, -100 * nextPosition, 500, 0, ease);
             // current.style.transform = `translateX(${-100 * position}%)`;
@@ -53,6 +52,7 @@ class Carousel {
             position = nextPosition;
             setTimeout(nextPic, 3000);
         }
+        
         timeline.start();
 
         setTimeout(nextPic, 3000);

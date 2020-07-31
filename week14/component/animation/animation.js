@@ -8,7 +8,6 @@ export class Timeline {
 
     tick () {
         let t = Date.now() - this.startTime;
-        console.log(t);
         let animations = this.animations.filter(animation => !animation.finished);
         for (let animation of this.animations) {
             let {object, property, duration,  template, start, end, startTime,timingFunction, delay} = animation;
@@ -22,12 +21,12 @@ export class Timeline {
             let value = animation.valueFromProgression(progress);
             object[property] = template(value);
         }
-        if (animations.length) {
+        // if (animations.length) 
             this.timer = requestAnimationFrame(this.tick);
-        }
     }
 
     add (animation, startTime) {
+        
         this.animations.push(animation);
         animation.finished = false;
         if (this.state === "playing") {
