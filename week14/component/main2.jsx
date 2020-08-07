@@ -3,9 +3,6 @@ import './index.css';
 import './carousel.view';
 import {Timeline, Animation} from './animation/animation.js';
 import {cubicBezier, ease} from './animation/cubicBezier';
-class Child {
-
-}
 
 class Carousel {
     constructor(config) {
@@ -128,20 +125,51 @@ class Carousel {
         this.render().mountTo(parent);
     }
 }
-// let component = <Div id="a" class="b" style="width: 100px; height: 100px; background-color: #f60">
-//     <Div/>
-//     <Div/>
-//     hello world
-//     <Div/>
-// </Div>
 
-let component = <Carousel data={[
-    "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
-    "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
-    "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
-    "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
-]} />
+class Panel {
+    constructor(config) {
+        this.attributes = new Map();
+        this.properties = new Map();
+        this.children = [];
+    }
 
+    setAttribute(name, value) {
+        this[name] = value;
+        // this.attributes.set(name, value);
+    }
+
+    appendChild(child) {
+        this.children.push(child);
+    }
+
+    addEventListener() {
+        this.root.addEventListener(...arguments);
+    }
+
+    render () {
+        return <div class="panel">
+            <h1>{this.title}</h1>
+            <div>
+                {this.children}
+            </div>
+        </div>
+    }
+
+    mountTo(parent) {
+        this.render().mountTo(parent);
+    }
+}
+
+// let component = <Carousel data={[
+//     "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg",
+//     "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg",
+//     "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg",
+//     "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
+// ]} />
+
+let component = <Panel title="Panel">
+    <div>hello world</div>
+</Panel>
 component.mountTo(document.body);
 
 // component.id = "b"
