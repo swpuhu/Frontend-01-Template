@@ -7,8 +7,13 @@ export function createElement(Cls, attributes, ...children) {
     }
 
     for (let name in attributes) {
-        o.setAttribute(name, attributes[name]);
-        o[name] = attributes[name];
+        
+        if (name === 'onClick') {
+            o.root.addEventListener('click', attributes[name]);
+        } else {
+            o.setAttribute(name, attributes[name]);
+            o[name] = attributes[name];
+        }
     }
     // console.log(o);
     let visit = (children) => {
@@ -44,6 +49,9 @@ export class Wrapper {
         this.root.setAttribute(name, value);
     }
 
+    getAttribute (name) {
+        return this[name];
+    }
     appendChild(child) {
         this.children.push(child);
     }
@@ -63,6 +71,23 @@ export class Wrapper {
     get style () {
         return this.root.style;
     }
+
+    set style (v) {
+        this.root.style = v;
+    }
+
+    set innerText (text) {
+        return this.root.innerText = text;
+    }
+
+    get innerText () {
+        return this.root.innerText;
+    }
+
+    get classList () {
+        return this.root.classList;
+    }
+
 }
 export class Div {
     constructor(config) {
@@ -101,5 +126,9 @@ export class Text {
 
     mountTo(parent) {
         parent.appendChild(this.root);
+    }
+
+    getAttribute(name) {
+        return;
     }
 }

@@ -14,3 +14,8 @@
     height: 300px;
     transition: ease 0.5s;
 }
+
+.selected {
+    background-color: #f60;
+    color: #fff;
+}

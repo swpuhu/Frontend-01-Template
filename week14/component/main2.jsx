@@ -1,9 +1,9 @@
 import { createElement } from './createElement';
 import './index.css';
 import './carousel.view';
-import {Timeline, Animation} from './animation/animation.js';
-import {cubicBezier, ease} from './animation/cubicBezier';
-
+import { Timeline, Animation } from './animation/animation.js';
+import { cubicBezier, ease } from './animation/cubicBezier';
+import {ListView} from './ListView';
 class Carousel {
     constructor(config) {
         this.attributes = new Map();
@@ -49,7 +49,7 @@ class Carousel {
             position = nextPosition;
             setTimeout(nextPic, 3000);
         }
-        
+
         timeline.start();
 
         setTimeout(nextPic, 3000);
@@ -131,6 +131,7 @@ class Panel {
         this.attributes = new Map();
         this.properties = new Map();
         this.children = [];
+        this.state = Object.create(null);
     }
 
     setAttribute(name, value) {
@@ -146,11 +147,29 @@ class Panel {
         this.root.addEventListener(...arguments);
     }
 
-    render () {
+    select(i) {
+        for (let view of this.childViews) {
+            view.style.display = 'none';
+        }
+        this.childViews[i].style.display = "";
+        for (let view of this.tilteViews) {
+            view.classList.remove('selected');
+        }
+        this.tilteViews[i].classList.add('selected');
+        // this.titleView.innerText = this.children[i].innerText;
+    }
+
+    render() {
+        setTimeout(() => {
+            this.select(0)
+        }, 16);
+        this.childViews = this.children.map(child => <div style="width: 300px;min-height:300px">{child}</div>)
+        this.tilteViews = this.children.map((child, i) => <span onClick={() => { this.select(i) }} style="width: 300px;min-height:300px; padding: 5px;">{child.getAttribute('title')}</span>)
+        this.titleView = <h1 style="background-color:lightgreen;width:300px;margin:0">title</h1>
         return <div class="panel">
-            <h1>{this.title}</h1>
+            {this.tilteViews}
             <div>
-                {this.children}
+                {this.childViews}
             </div>
         </div>
     }
@@ -167,9 +186,29 @@ class Panel {
 //     "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg",
 // ]} />
 
-let component = <Panel title="Panel">
-    <div>hello world</div>
-</Panel>
-component.mountTo(document.body);
+// let component = <Panel title="Panel">
+//     <span title="title1">comments1</span>
+//     <span title="title2">comments2</span>
+//     <span title="title3">comments3</span>
+//     <span title="title4">comments4</span>
+//     <span title="title5">comments5</span>
+// </Panel>
+
+let data = [
+    { title: "蓝猫", url: "https://static001.geekbang.org/resource/image/bb/21/bb38fb7c1073eaee1755f81131f11d21.jpg" },
+    { title: "橘猫加白", url: "https://static001.geekbang.org/resource/image/1b/21/1b809d9a2bdf3ecc481322d7c9223c21.jpg" },
+    { title: "狸花加白", url: "https://static001.geekbang.org/resource/image/b6/4f/b6d65b2f12646a9fd6b8cb2b020d754f.jpg" },
+    { title: "橘猫", url: "https://static001.geekbang.org/resource/image/73/e4/730ea9c393def7975deceb48b3eb6fe4.jpg" }
+];
+let list = <ListView data={data}>
+    {
+        record => <figure>
+            <img src={record.url}/>
+            <figcaption>{record.title}</figcaption>
+        </figure>
+    }
+</ListView>
+// component.mountTo(document.body);
+list.mountTo(document.body);
 
 // component.id = "b"
