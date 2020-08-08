@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #el, #el-another {
+            width: 100px;
+            height: 100px;
+            background-color: pink;
+        }
+        #el2 {
+            width: 100px;
+            height: 100px;
+            background-color: pink;
+            animation: move 5s ease forwards;
+        }
+
+        @keyframes move{
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(200px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="el"></div>
+    <div id="el-another"></div>
+    <div id="el2"></div>
+</body>
+<script type="module" src="./index.js">
+</script>
+</html>
